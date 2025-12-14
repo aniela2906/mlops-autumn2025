@@ -21,7 +21,7 @@ func main() {
 	// Use Python container
 	python := client.Container().
 		From("python:3.11-slim").
-		WithDirectory("/app", client.Host().Directory(".")).
+		WithDirectory("/app", client.Host().Directory("..")).
 		WithWorkdir("/app")
 
 	// Install dependencies
