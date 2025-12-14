@@ -30,17 +30,15 @@ Happy-days-forked/
 └── requirements.txt               # Project dependencies needed to run the pipeline  
   ```
   
-  
+## Pipeline Overview
 ### The pipeline performs the following steps:
 - Load & preprocess data (cleaning, feature generation, train–test split)
+- Generate features + train/test split
 - Train two models: Linear Regression and XGBoost
-- Log experiments to MLflow, including parameters, metrics, and artifacts
+- Log every experiment to MLflow (params, metrics, artifacts)
 - Select the best model based on evaluation metrics
-- Export artifacts (model selection results, metrics, columns used, date limits)
+- Export artifacts to the artifacts/ folder
     
-NOT DONE YET- Automate training via GitHub Actions and Dagger workflows 
-NOT DONE YET- Ensure reproducibility using DVC for data versioning and pipeline tracking 
-
 
 ### HOW TO run the pipeline:
 1. Clone the repository
@@ -48,11 +46,18 @@ NOT DONE YET- Ensure reproducibility using DVC for data versioning and pipeline 
   git clone https://github.com/aniela2906/Happy-days-forked.git
   cd Happy-days-forked
   ```
-2. Install dependencies
+2. (Recommended) Create a virtual environment
+   -> once in the repo folder :
+   WINDOWS:
+  ```bash
+  python -m venv clean_env
+  clean_env\Scripts\activate
+  ```
+3. Install dependencies
   ```bash
   pip install -r requirements.txt
   ```
-3. Run the code ( data preprocessing → model training → model selection) 
+4. Run the pipeline 
   ```bash
   python -m src.pipeline.train
   ```
@@ -64,3 +69,21 @@ NOT DONE YET- Ensure reproducibility using DVC for data versioning and pipeline 
 - model selection  
 - MLflow logging  
 - artifact export  
+
+5. When the run finishes, you will find updated artifacts in:
+ ```bash
+  artifacts/
+│
+├── model_selection.json   # Best model + F1 score + MLflow Run ID
+├── lr_metrics.json
+├── xgboost_metrics.json
+├── columns_list.json
+└── date_limits.json
+ ```
+
+Additionally, all experiments will be tracked in:
+  ```bash
+  mlruns/
+  ```
+You can explore results with mlflow ui. 
+
