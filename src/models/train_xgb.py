@@ -9,8 +9,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-from xgboost import XGBRFClassifier
+from xgboost import XGBClassifier
 from scipy.stats import uniform, randint
+import mlflow.sklearn
 
 
 # ----------------------------
@@ -71,15 +72,19 @@ def train_xgboost_model(df: pd.DataFrame, artifacts_dir="artifacts", experiment_
     )
 
     # Model + hyperparameter search
-    model = XGBRFClassifier(random_state=42)
+    model = XGBClassifier(random_state=42)
 
     params = {
         "learning_rate": uniform(1e-2, 3e-1),
         "min_split_loss": uniform(0, 10),
         "max_depth": randint(3, 10),
         "subsample": uniform(0, 1),
-        "objective": ["reg:squarederror", "binary:logistic", "reg:logistic"],
-        "eval_metric": ["aucpr", "error"],
+
+        # ONLY VALID CLASSIFIER OBJECTIVE
+        "objective": ["binary:logistic"],
+
+        # CLASSIFIER-SAFE METRICS
+        "eval_metric": ["logloss", "auc", "aucpr"]
     }
 
     model_grid = RandomizedSearchCV(
@@ -96,7 +101,7 @@ def train_xgboost_model(df: pd.DataFrame, artifacts_dir="artifacts", experiment_
     # ----------------------------
     with mlflow.start_run() as run:
 
-        mlflow.log_param("model_type", "XGBRFClassifier")
+        mlflow.log_param("model_type", "XGBClassifier")
 
         model_grid.fit(X_train, y_train)
         best_model = model_grid.best_estimator_
@@ -132,9 +137,9 @@ def train_xgboost_model(df: pd.DataFrame, artifacts_dir="artifacts", experiment_
         # ----------------------------
         # Log model to MLflow
         # ----------------------------
-        mlflow.xgboost.log_model(
-            xgb_model=best_model,
-            artifact_path="model"
+        mlflow.sklearn.log_model(
+        sk_model=best_model,
+        artifact_path="model"
         )
 
         return best_model, classifications, run.info.run_id
