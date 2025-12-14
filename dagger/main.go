@@ -21,8 +21,8 @@ func main() {
 	// Choose python image
 	container := client.Container().From("python:3.11-slim")
 
-	// Mount repository code inside the container
-	source := client.Host().Directory(".", dagger.HostDirectoryOpts{})
+	// Mount ROOT of project (not dagger folder!)
+	source := client.Host().Directory("..")
 
 	container = container.
 		WithMountedDirectory("/app", source).
@@ -32,17 +32,14 @@ func main() {
 
 	// ---- EXPORT artifacts/ FROM CONTAINER ----
 	artifacts := container.Directory("artifacts")
-
 	_, err = artifacts.Export(ctx, "./artifacts")
 	if err != nil {
 		log.Fatalf("Failed to export artifacts directory: %v", err)
 	}
-
 	log.Println("Exported artifacts/ folder")
 
 	// ---- EXPORT mlruns/ FROM CONTAINER ----
 	mlruns := container.Directory("mlruns")
-
 	_, err = mlruns.Export(ctx, "./mlruns")
 	if err != nil {
 		log.Printf("Warning: could not export mlruns/: %v", err)
