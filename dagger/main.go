@@ -2,55 +2,53 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"os"
+	"log"
 
 	"dagger.io/dagger"
 )
 
 func main() {
+
 	ctx := context.Background()
 
-	// Connect to Dagger engine
-	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stdout))
+	// Start Dagger client
+	client, err := dagger.Connect(ctx, dagger.WithLogOutput(log.Writer()))
 	if err != nil {
-		panic(err)
+		log.Fatalf("Failed to connect to Dagger: %v", err)
 	}
 	defer client.Close()
 
-	// Use Python container
-	python := client.Container().
-		From("python:3.11-slim").
-		WithDirectory("/app", client.Host().Directory("..")).
-		WithWorkdir("/app")
+	// Choose python image
+	container := client.Container().From("python:3.11-slim")
 
-	// Install dependencies
-	python = python.WithExec([]string{
-		"pip", "install", "--no-cache-dir", "-r", "requirements.txt",
-	})
+	// Mount repository code inside the container
+	source := client.Host().Directory(".", dagger.HostDirectoryOpts{})
 
-	// Run the Python MLOps pipeline
-	python = python.WithExec([]string{
-		"python", "-m", "src.pipeline.train",
-	})
+	container = container.
+		WithMountedDirectory("/app", source).
+		WithWorkdir("/app").
+		WithExec([]string{"pip", "install", "--no-cache-dir", "-r", "requirements.txt"}).
+		WithExec([]string{"python", "-m", "src.pipeline.train"})
 
-	fmt.Println("Pipeline executed inside Dagger")
+	// ---- EXPORT artifacts/ FROM CONTAINER ----
+	artifacts := container.Directory("artifacts")
 
-	// EXTRACT ARTIFACT: best model info
-	// (instructors require artifact named "model")
-
-	modelFile := python.File("artifacts/model_selection.json")
-
-	contents, err := modelFile.Contents(ctx)
+	_, err = artifacts.Export(ctx, "./artifacts")
 	if err != nil {
-		panic(err)
+		log.Fatalf("Failed to export artifacts directory: %v", err)
 	}
 
-	// Write output outside container → required by assignment
-	err = os.WriteFile("model", []byte(contents), 0644)
+	log.Println("Exported artifacts/ folder")
+
+	// ---- EXPORT mlruns/ FROM CONTAINER ----
+	mlruns := container.Directory("mlruns")
+
+	_, err = mlruns.Export(ctx, "./mlruns")
 	if err != nil {
-		panic(err)
+		log.Printf("Warning: could not export mlruns/: %v", err)
+	} else {
+		log.Println("Exported mlruns/ folder")
 	}
 
-	fmt.Println("Model artifact exported to ./model")
+	log.Println("Pipeline executed successfully inside Dagger")
 }
