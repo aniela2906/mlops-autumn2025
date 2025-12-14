@@ -37,8 +37,9 @@ Happy-days-forked/
 - Log experiments to MLflow, including parameters, metrics, and artifacts
 - Select the best model based on evaluation metrics
 - Export artifacts (model selection results, metrics, columns used, date limits)
-- Automate training via GitHub Actions and Dagger workflows NOT DONE YET
-- Ensure reproducibility using DVC for data versioning and pipeline tracking NOT DONE YET
+    
+NOT DONE YET- Automate training via GitHub Actions and Dagger workflows 
+NOT DONE YET- Ensure reproducibility using DVC for data versioning and pipeline tracking 
 
 
 ### HOW TO run the pipeline:
