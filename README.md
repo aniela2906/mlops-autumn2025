@@ -6,7 +6,7 @@ This repository contains our implementation of a fully reproducible end-to-end M
 ### 1. Repository Structure 
 
 ```text
-Happy-Days/
+happy-days-forked/
 │
 ├──.dvc                         # Internal DVC directory storing configuration and metadata for data versioning.
 │ 
@@ -63,9 +63,9 @@ If you wish to run the project locally, you must have the following tools instal
 
 ### Execution
 
-1. **Start by cloning the repository**
+**1. Start by cloning the repository**
 
-2. **Execute the MLOps Pipeline:**
+**2. Execute the MLOps Pipeline:**
    
     Type the following command from the root repo:
     **go run main.go**
