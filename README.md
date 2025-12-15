@@ -6,7 +6,7 @@ This repository contains our implementation of a fully reproducible end-to-end M
 ### 1. Repository Structure 
 
 ```text
-happy-days-forked/
+Happy-days-forked/
 │
 ├──.dvc                         # Internal DVC directory storing configuration and metadata for data versioning.
 │ 
@@ -70,7 +70,7 @@ If you wish to run the project locally, you must have the following tools instal
     Type the following command from the root repo:
     **go run main.go**
 
-    this command will handle everything: initializing the Dagger container, installing Python dependencies, performing the DVC pull, and executing the three pipeline stages (`data_prep.py`, `train.py`, `deploy.py`). 
+this command will handle everything: initializing the Dagger container, installing Python dependencies, performing the DVC pull, and executing the three pipeline stages (`data_prep.py`, `train.py`, `deploy.py`). 
 
 ### Post-Execution
 
