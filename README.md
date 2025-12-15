@@ -93,8 +93,8 @@ This command:
   
 After a successful run, the following directories will be created:  
 
-* **`mlruns/`:** Contains the local MLflow Tracking data and the Model Registry, where the final **Logistic Regression** model is registered etc.
-* **`artifacts/`:** Contains the final generated files, including `model.pkl`, `train_data_gold.csv`, and `model_results.json`.
+* **`mlruns/`:** Contains the local MLflow Tracking data and the Model Registry.
+* **`artifacts/`:** Contains the final generated files, including `model.pkl`, `train_data_gold.csv`, and `model_results.json` etc.
 
 > Note: The first execution may take several minutes due to image and dependency downloads.
 
