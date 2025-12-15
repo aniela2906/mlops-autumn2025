@@ -28,7 +28,6 @@ Happy-days-forked/
 │
 ├──go.sum                       # Go file that ensures continuity and integrity of dependencies.
 │
-├──hand-in.pdf                  # Submission document.
 ├── main.go                     # Orchestrator (Dagger): Defines the pipeline steps and exports the generated folders.
 ├── requirements.txt            # Dependencies: Defines the Python environment for the Dagger container.
 └── README.md
@@ -53,30 +52,49 @@ Once the run completes, open the workflow’s **Summary** page to download the g
 
 ## How To Run the Project Locally 
 
-If you wish to run the project locally, you must have the following tools installed on your local machine:
-
-  **Go:** Required to run the Dagger orchestrator (`main.go`).
+The project can be executed locally using the Dagger orchestrator.
+All pipeline steps are run inside a container and do not require a local Python environment.  
   
-  **Dagger CLI:** The command-line interface for running the Dagger pipeline.
+### Prerequisites:
+Ensure the following tools are installed:  
+  **Docker Desktop:** Must be running!     
+  **Go:** Required to run the Dagger orchestrator (`main.go`).  
+  **Dagger CLI:** The command-line interface for running the Dagger pipeline.  
+  
+You can verify the installation with:  
+```bash
+docker version
+go version
+dagger version
+```
 
-  **Docker Desktop:** Must be running! Required by Dagger to execute the pipeline.
 
-### Execution
-
-**1. Start by cloning the repository**
+**1. Clone the repository**
+```bash
+git clone <repository-url>
+cd <root of the repository>
+```
 
 **2. Execute the MLOps Pipeline:**
-
-Run the following command from the root repo:
+  
+```bash
+go run main.go
+```
+This command:  
     
-    go run main.go
-
-this command will handle everything: initializing the Dagger container, installing Python dependencies, performing the DVC pull, and executing the three pipeline stages (`data_prep.py`, `train.py`, `deploy.py`). 
-
-### Post-Execution
-
-After a successful run, the following directories will be generated in your project root, containing the results of the pipeline:
+- starts the Dagger engine    
+- builds a containerized Python environment  
+- pulls the dataset using DVC   
+- runs data preparation, training, and deployment stages  
+- logs experiments using MLflow  
+- exports the generated artifacts and MLflow runs to the local filesystem  
+  
+**3. Verify the output**  
+  
+After a successful run, the following directories will be created:  
 
 * **`mlruns/`:** Contains the local MLflow Tracking data and the Model Registry, where the final **Logistic Regression** model is registered etc.
 * **`artifacts/`:** Contains the final generated files, including `model.pkl`, `train_data_gold.csv`, and `model_results.json`.
+
+> Note: The first execution may take several minutes due to image and dependency downloads.
 
