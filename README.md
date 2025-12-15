@@ -22,6 +22,13 @@ Happy-Days/
 │   ├── train.py                # Phase 2: Training, MLflow run logging, and local model saving.
 │   └── deploy.py               # Phase 3: Model selection, registration to the 'mlruns' directory.
 │
+├── .dvcignore                  
+│
+├──go.mod                       # Go file that defines the module and required dependencies
+│
+├──go.sum                       # Go file that ensures continuity and integrity of dependencies.
+│
+├──hand-in.pdf                  # Submission document.
 ├── main.go                     # Orchestrator (Dagger): Defines the pipeline steps and exports the generated folders.
 ├── requirements.txt            # Dependencies: Defines the Python environment for the Dagger container.
 └── README.md
