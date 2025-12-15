@@ -1,93 +1,70 @@
 # ITU BDS MLOPS'25 - Project
 
-This repository contains our implementation of a fully reproducible end-to-end MLOps pipeline developed for the ITU BDS MLOps 2025 course.
-The goal was to transform the original exploratory notebook into a modular, automated ML system using **DVC** for data management, **MLflow** for experiment tracking, and **GitHub Actions + Dagger** for CI/CD automation.
-  
-  
-## Project Structure
-```bash
-Happy-days-forked/  
-│
-├──.github/workflows/pipeline.yml  # GitHub Actions workflow for automated pipeline execution
-│
-├── artifacts/                     # Model artifacts, metrics & outputs  
-│   ├── model_selection.json       # Summary of the best model  
-│   ├── lr_metrics.json            # Metrics from the Linear Regression run  
-│   ├── xgboost_metrics.json       # Metrics from the XGBoost run  
-│   ├── columns_list.json          # Column names used for training  
-│   └── date_limits.json           # Date filtering boundaries  
-│  
-├── notebooks/                     # Original notebooks provided for the project  
-│   ├── main.ipynb  
-│   ├── model_inference.py  
-│   └── requirements.txt  
-│  
-├── src/  
-│   ├── data/                      # Data loading, cleaning, preprocessing  
-│   ├── models/                    # Training scripts for LR and XGBoost  
-│   └── pipeline/                  # Pipeline orchestration & model selection  
-│  
-├── .gitignore  
-├── README.md  
-└── requirements.txt               # Project dependencies needed to run the pipeline  
-  ```
-  
-## Pipeline Overview
-### The pipeline performs the following steps:
-- Load & preprocess data (cleaning, feature generation, train–test split)
-- Generate features + train/test split
-- Train two models: **Linear Regression** and **XGBoost**
-- Log every experiment to **MLflow** (params, metrics, artifacts)
-- Select the best model based on evaluation metrics
-- Export artifacts to the artifacts/ folder
-    
+This repository contains our implementation of a fully reproducible end-to-end MLOps pipeline developed for the ITU BDS MLOps 2025 course. The goal was to transform the original exploratory notebook into a modular, automated ML system using **DVC** for data management, **MLflow** for experiment tracking, and **GitHub Actions + Dagger** for CI/CD automation.
 
-### How to Run the Pipeline Locally (Manual Execution):
-1. Clone the repository
-  ```bash
-  git clone https://github.com/aniela2906/Happy-days-forked.git
-  cd Happy-days-forked
-  ```
-2. (Recommended) Create a virtual environment
-   -> once in the repo folder :  
-   *(WINDOWS):* 
-  ```bash
-  python -m venv clean_env
-  clean_env\Scripts\activate
-  ```
-3. Install dependencies
-  ```bash
-  pip install -r requirements.txt
-  ```
-4. Run the pipeline 
-  ```bash
-  python -m src.pipeline.train
-  ```
-  This command runs:
-- preprocessing  
-- feature extraction  
-- **LR** training  
-- **XGBoost** training  
-- model selection  
-- **MLflow** logging  
-- artifact export  
 
-5. When the run finishes, you will find updated artifacts in:
- ```bash
-  artifacts/
+### 1. Repository Structure 
+
+```text
+Happy-Days/
 │
-├── model_selection.json   # Best model + F1 score + MLflow Run ID
-├── lr_metrics.json
-├── xgboost_metrics.json
-├── columns_list.json
-└── date_limits.json
- ```
+├── .github/
+│   └── workflows/
+│       └── ci_pipeline.yml     # CI/CD Orchestration: Executes Dagger, then uploads the generated artifacts.
+│
+├── data/
+│   └── raw_data.csv.dvc        # DVC Pointer
+│
+├── src/                        # Core Python Pipeline
+│   ├── data_prep.py            # Phase 1: Executes 'dvc pull' and performs data cleaning.
+│   ├── train.py                # Phase 2: Training, MLflow run logging, and local model saving.
+│   └── deploy.py               # Phase 3: Model selection, registration to the 'mlruns' directory.
+│
+├── main.go                     # Orchestrator (Dagger): Defines the pipeline steps and exports the generated folders.
+├── requirements.txt            # Dependencies: Defines the Python environment for the Dagger container.
+└── README.md
+```
+## How To Run the Project on Github UI
 
-Additionally, all experiments will be tracked in:
-  ```bash
-  mlruns/
-  ```
-You can explore results with **mlflow ui**. 
+Navigate to Actions: On your GitHub repository page, click the Actions tab.
+
+Select Workflow: On the left sidebar, click on "MLOps Pipeline"
+
+Trigger Run: Look for the "Run workflow" button or dropdown menu near the top of the workflow page.
+
+Execute: Click the button to start the job on a GitHub-hosted runner.
+
+
+## How To Run the Project Locally 
+
+If you wish to run the project locally, you must have the following tools installed on your local machine:
+
+  **Go:** Required to run the Dagger orchestrator (`main.go`).
+  
+  **Dagger CLI:** The command-line interface for running the Dagger pipeline.
+
+  **Docker Desktop:** Must be running! Required by Dagger to execute the pipeline.
+
+### Execution
+
+1. **Start by cloning the repository**
+
+2. **Execute the MLOps Pipeline:**
+   
+    Type the following command from the root repo:
+    **go run main.go**
+
+    this command will handle everything: initializing the Dagger container, installing Python dependencies, performing the DVC pull, and             executing the three pipeline stages (`data_prep.py`, `train.py`, `deploy.py`). 
+
+### Post-Execution
+
+After a successful run, the following directories will be generated in your project root, containing the results of the pipeline:
+
+* **`mlruns/`:** Contains the local MLflow Tracking data and the Model Registry, where the final **Logistic Regression** model is registered etc.
+* **`artifacts/`:** Contains the final generated files, including `model.pkl`, `train_data_gold.csv`, and `model_results.json`.
+
+
+--------------------------------------------------- everything below needs to be reworked -------------------------------------------------------------------
 
 ## Continuous Integration (CI) with GitHub Actions
 To ensure full reproducibility and automation, the project includes a GitHub Actions workflow located at:
