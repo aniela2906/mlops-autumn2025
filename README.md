@@ -34,6 +34,8 @@ Trigger Run: Look for the "Run workflow" button or dropdown menu near the top of
 
 Execute: Click the button to start the job on a GitHub-hosted runner.
 
+Post-Execution: Navigate to the workflows "Summary" page in order to retrieve the artifacts generated during the run. 
+
 
 ## How To Run the Project Locally 
 
