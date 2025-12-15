@@ -66,8 +66,9 @@ If you wish to run the project locally, you must have the following tools instal
 **1. Start by cloning the repository**
 
 **2. Execute the MLOps Pipeline:**
-   
-    Type the following command from the root repo:
+
+Run the following command from the root repo:
+    
     go run main.go
 
 this command will handle everything: initializing the Dagger container, installing Python dependencies, performing the DVC pull, and executing the three pipeline stages (`data_prep.py`, `train.py`, `deploy.py`). 
