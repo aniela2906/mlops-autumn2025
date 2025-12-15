@@ -8,6 +8,8 @@ This repository contains our implementation of a fully reproducible end-to-end M
 ```text
 Happy-Days/
 │
+├──.dvc                         # Internal DVC directory storing configuration and metadata for data versioning.
+│ 
 ├── .github/
 │   └── workflows/
 │       └── ci_pipeline.yml     # CI/CD Orchestration: Executes Dagger, then uploads the generated artifacts.
@@ -65,32 +67,16 @@ After a successful run, the following directories will be generated in your proj
 * **`mlruns/`:** Contains the local MLflow Tracking data and the Model Registry, where the final **Logistic Regression** model is registered etc.
 * **`artifacts/`:** Contains the final generated files, including `model.pkl`, `train_data_gold.csv`, and `model_results.json`.
 
+## Continuous Integration (CI)
 
---------------------------------------------------- everything below needs to be reworked -------------------------------------------------------------------
+The project uses GitHub Actions to **automatically** run the full MLOps pipeline
+via the Dagger orchestrator.
 
-## Continuous Integration (CI) with GitHub Actions
-To ensure full reproducibility and automation, the project includes a GitHub Actions workflow located at:
-  ```bash
-  .github/workflows/pipeline.yml
-  ```
-On every push to the **main** branch, GitHub Actions **automatically**:  
-1. Checks out the repository  
-2. Sets up a clean Python environment  
-3. Installs all dependencies from *requirements.txt*  
-4. Runs the full ML pipeline *(python -m src.pipeline.train)*  
-5. Collects results from the run, including:  
-- MLflow experiment data  
-- model artifacts (metrics, trained models, JSON summaries)
-6. Uploads artifacts as downloadable files in GitHub Actions UI  
-  
-This guarantees that the pipeline executes identically on any machine, is fully reproducible, and requires no manual intervention. The instructor can download all results directly from GitHub Actions.
-  
-### Files produced by CI *(downloadable artifacts)*
-After each workflow run, GitHub Actions exposes two ZIP packages: 
-```bash
-model-artifacts.zip       # all model outputs and metrics
-mlflow-runs.zip           # full MLflow tracking directory
-```
-    
-These files can be downloaded from the **Actions → Run → Artifacts section**.
+On each manual workflow trigger, GitHub Actions:
+1. Checks out the repository
+2. Sets up Go, Docker, and Dagger
+3. Executes `go run main.go`
+4. Runs the complete pipeline inside a containerized environment
+5. Uploads the generated artifacts for inspection
 
+This ensures that the pipeline is reproducible and runs identically in CI and locally.
