@@ -30,13 +30,13 @@ Happy-Days/
 
 Navigate to Actions: On your GitHub repository page, click the Actions tab.
 
-Select Workflow: On the left sidebar, click on "MLOps Pipeline"
+Select Workflow: On the left sidebar, click on *"MLOps Pipeline"*
 
-Trigger Run: Look for the "Run workflow" button or dropdown menu near the top of the workflow page.
+Trigger Run: Look for the *"Run workflow"* button or dropdown menu near the top of the workflow page.
 
 Execute: Click the button to start the job on a GitHub-hosted runner.
 
-Post-Execution: Navigate to the workflows "Summary" page in order to retrieve the artifacts generated during the run. 
+Post-Execution: Navigate to the workflows *"Summary"* page in order to retrieve the artifacts generated during the run. 
 
 
 ## How To Run the Project Locally 
@@ -58,7 +58,7 @@ If you wish to run the project locally, you must have the following tools instal
     Type the following command from the root repo:
     **go run main.go**
 
-    this command will handle everything: initializing the Dagger container, installing Python dependencies, performing the DVC pull, and             executing the three pipeline stages (`data_prep.py`, `train.py`, `deploy.py`). 
+    this command will handle everything: initializing the Dagger container, installing Python dependencies, performing the DVC pull, and executing the three pipeline stages (`data_prep.py`, `train.py`, `deploy.py`). 
 
 ### Post-Execution
 
@@ -67,16 +67,3 @@ After a successful run, the following directories will be generated in your proj
 * **`mlruns/`:** Contains the local MLflow Tracking data and the Model Registry, where the final **Logistic Regression** model is registered etc.
 * **`artifacts/`:** Contains the final generated files, including `model.pkl`, `train_data_gold.csv`, and `model_results.json`.
 
-## Continuous Integration (CI)
-
-The project uses GitHub Actions to **automatically** run the full MLOps pipeline
-via the Dagger orchestrator.
-
-On each manual workflow trigger, GitHub Actions:
-1. Checks out the repository
-2. Sets up Go, Docker, and Dagger
-3. Executes `go run main.go`
-4. Runs the complete pipeline inside a containerized environment
-5. Uploads the generated artifacts for inspection
-
-This ensures that the pipeline is reproducible and runs identically in CI and locally.
