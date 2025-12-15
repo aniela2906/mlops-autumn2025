@@ -1,4 +1,4 @@
-module Happy-Days
+module happy-days-forked
 
 go 1.25.1
 
