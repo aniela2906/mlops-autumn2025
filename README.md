@@ -35,15 +35,20 @@ Happy-Days/
 ```
 ## How To Run the Project on Github UI
 
-Navigate to Actions: On your GitHub repository page, click the Actions tab.
+**1. Open the Actions tab**  
+Navigate to your GitHub repository and click on the **Actions tab**.  
 
-Select Workflow: On the left sidebar, click on *"MLOps Pipeline"*
+**2. Select the workflow**  
+From the left-hand menu, choose *“MLOps Pipeline”*.  
 
-Trigger Run: Look for the *"Run workflow"* button or dropdown menu near the top of the workflow page.
+**3. Trigger the workflow**  
+Click **Run workflow** at the top of the page to start the pipeline on a GitHub-hosted runner.  
 
-Execute: Click the button to start the job on a GitHub-hosted runner.
+**4. Monitor execution**  
+Follow the progress of the job directly in the workflow run view.  
 
-Post-Execution: Navigate to the workflows *"Summary"* page in order to retrieve the artifacts generated during the run. 
+**5. Retrieve results**  
+Once the run completes, open the workflow’s **Summary** page to download the generated artifacts.  
 
 
 ## How To Run the Project Locally 
