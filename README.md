@@ -97,10 +97,13 @@ After a successful run, the following directories will be created:
 * **`artifacts/`:** Contains the final generated files, including `model.pkl`, `train_data_gold.csv`, and `model_results.json` etc.
 
 
-**Authors
 
-Earth Vangwithayakul eava@itu.dk - pecxpecx
-Aniela Marta Ciecierska anci@itu.dk - aniela2906
-Viktor Ulitin viul@itu.dk - viul1488
+## Authors
+
+Earth Vangwithayakul eava@itu.dk - pecxpecx 
+
+Aniela Marta Ciecierska anci@itu.dk - aniela2906 
+
+Viktor Ulitin viul@itu.dk - viul1488 
 
 
