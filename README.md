@@ -96,5 +96,11 @@ After a successful run, the following directories will be created:
 * **`mlruns/`:** Contains the local MLflow Tracking data and the Model Registry.
 * **`artifacts/`:** Contains the final generated files, including `model.pkl`, `train_data_gold.csv`, and `model_results.json` etc.
 
-> Note: The first execution may take several minutes due to image and dependency downloads.
+
+**Authors**
+
+Earth Vangwithayakul eava@itu.dk - pecxpecx
+Aniela Marta Ciecierska anci@itu.dk - aniela2906
+Viktor Ulitin viul@itu.dk - viul1488
+
 
